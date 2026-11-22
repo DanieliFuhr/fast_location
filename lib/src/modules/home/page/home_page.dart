@@ -6,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/colors/app_colors.dart';
 import '../../history/page/history_page.dart';
+import '../components/address_list_component.dart';
+import '../components/empty_search_component.dart';
 import '../controller/home_controller.dart';
 import '../model/address_model.dart';
 
@@ -170,46 +172,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildAddressCard(AddressModel address) {
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 12),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              address.cep.isEmpty ? 'CEP não informado' : address.cep,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text('Logradouro: ${address.street}'),
-            Text('Bairro: ${address.neighborhood}'),
-            Text('Cidade: ${address.city} - ${address.state}'),
-            if (address.complement != null &&
-                address.complement!.isNotEmpty)
-              Text('Complemento: ${address.complement}'),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () => _openRoute(address),
-                icon: const Icon(Icons.directions),
-                label: const Text('Traçar rota no Google Maps'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -361,18 +323,12 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 if (_controller.results.isEmpty) {
-                  return const Text(
-                    'Nenhuma pesquisa realizada ainda.',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                    ),
-                  );
+                  return const EmptySearchComponent();
                 }
 
-                return Column(
-                  children: _controller.results
-                      .map(_buildAddressCard)
-                      .toList(),
+                return AddressListComponent(
+                  addresses: _controller.results,
+                  onRoutePressed: _openRoute,
                 );
               },
             ),

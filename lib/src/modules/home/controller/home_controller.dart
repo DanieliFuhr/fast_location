@@ -2,10 +2,10 @@
 import 'package:mobx/mobx.dart';
 
 import '../model/address_model.dart';
-import '../repositories/address_repository.dart';
+import '../service/home_service.dart';
 
 class HomeController {
-  final AddressRepository _repository = AddressRepository();
+  final HomeService _service = HomeService();
 
   final Observable<bool> _isLoading = Observable(false);
   final Observable<String?> _errorMessage = Observable(null);
@@ -31,7 +31,7 @@ class HomeController {
     });
 
     try {
-      final address = await _repository.searchByCep(cep);
+      final address = await _service.searchByCep(cep);
 
       runInAction(() {
         _results.add(address);
@@ -64,7 +64,7 @@ class HomeController {
     });
 
     try {
-      final addresses = await _repository.searchByAddress(
+      final addresses = await _service.searchByAddress(
         state: state,
         city: city,
         street: street,
