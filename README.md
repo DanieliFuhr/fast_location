@@ -71,7 +71,7 @@ lib/
 1. Clone o repositório:
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/DanieliFuhr/fast_location.git
 ```
 
 2. Acesse a pasta do projeto:
